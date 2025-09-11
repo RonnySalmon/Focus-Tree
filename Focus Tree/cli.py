@@ -38,6 +38,15 @@ def main():
     parser_done.add_argument(
         'task_id', type=int, help='ID задачи для отметки как выполненной')
 
+    parser_delete = subparsers.add_parser('delete', help='Удалить задачу')
+    parser_delete.add_argument(
+        'task_id', type=int, help='ID задачи для удаления')
+
+    parser_focus = subparsers.add_parser(
+        'focus', help='Запустить таймер фокус-сессии')
+    parser_focus.add_argument('minutes', type=int, nargs='?',
+                              default=25, help='Длительность в минутах (по умолчанию 25)')
+
     args = parser.parse_args()
 
     tasks = load_tasks()
@@ -76,6 +85,40 @@ def main():
             print(f"Задача с ID {args.task_id} отмечена как выполненная!")
         else:
             print(f"Задача с ID {args.task_id} не найдена.")
+
+    elif args.command == 'delete':
+        task_found = False
+        for task in tasks:
+            if task['id'] == args.task_id:
+                tasks.remove(task)
+                task_found = True
+                break
+
+        if task_found:
+            save_tasks(tasks)
+            print(f"Задача с ID {args.task_id} удалена!")
+        else:
+            print(f"Задача с ID {args.task_id} не найдена.")
+
+    elif args.command == 'focus':
+        import time
+        total_seconds = args.minutes * 60
+
+        print(f"Фокус-сессия началась! Таймер на {args.minutes} минут.")
+        print("Нажмите Ctrl+C для прерывания.")
+
+        try:
+            for remaining in range(total_seconds, 0, -1):
+                mins, secs = divmod(remaining, 60)
+                time_display = f"{mins:02d}:{secs:02d}"
+                print(f"Осталось: {time_display}", end='\r')
+                time.sleep(1)
+
+            print("\n\nВремя вышло! Фокус-сессия завершена. 🎉")
+            print("\a")
+
+        except KeyboardInterrupt:
+            print("\n\nФокус-сессия прервана.")
 
     else:
         parser.print_help()
