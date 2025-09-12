@@ -1,23 +1,6 @@
 import argparse
-import json
-import os
-
-TASKS_FILE = 'tasks.json'
-
-
-def load_tasks():
-    if not os.path.exists(TASKS_FILE):
-        return []
-    try:
-        with open(TASKS_FILE, 'r') as f:
-            return json.load(f)
-    except (json.JSONDecodeError, FileNotFoundError):
-        return []
-
-
-def save_tasks(tasks):
-    with open(TASKS_FILE, 'w') as f:
-        json.dump(tasks, f, indent=4)
+from storage import load_tasks
+import commands
 
 
 def main():
@@ -51,77 +34,21 @@ def main():
 
     tasks = load_tasks()
 
-    if args.command == 'add':
-        if tasks:
-            new_id = max(task['id'] for task in tasks) + 1
+    try:
+        if args.command == 'add':
+            commands.add_task(tasks, args.title)
+        elif args.command == 'list':
+            commands.list_tasks(tasks)
+        elif args.command == 'done':
+            commands.done_task(tasks, args.task_id)
+        elif args.command == 'delete':
+            commands.delete_task(tasks, args.task_id)
+        elif args.command == 'focus':
+            commands.focus_timer(args.minutes)
         else:
-            new_id = 1
-
-        new_task = {'id': new_id,
-                    'title': args.title, 'status': 'active'}
-
-        tasks.append(new_task)
-
-        save_tasks(tasks)
-        print(f'Задача "{args.title}" добавлена с ID {new_id}!')
-
-    elif args.command == 'list':
-        if not tasks:
-            print("Список задач пуст. Добавьте первую задачу!")
-        else:
-            print("Список ваших задач:")
-            for task in tasks:
-                print(f"[{task['id']}] {task['status']}: {task['title']}")
-
-    elif args.command == 'done':
-        task_found = False
-        for task in tasks:
-            if task['id'] == args.task_id:
-                task['status'] = 'completed'
-                task_found = True
-                break
-        if task_found:
-            save_tasks(tasks)
-            print(f"Задача с ID {args.task_id} отмечена как выполненная!")
-        else:
-            print(f"Задача с ID {args.task_id} не найдена.")
-
-    elif args.command == 'delete':
-        task_found = False
-        for task in tasks:
-            if task['id'] == args.task_id:
-                tasks.remove(task)
-                task_found = True
-                break
-
-        if task_found:
-            save_tasks(tasks)
-            print(f"Задача с ID {args.task_id} удалена!")
-        else:
-            print(f"Задача с ID {args.task_id} не найдена.")
-
-    elif args.command == 'focus':
-        import time
-        total_seconds = args.minutes * 60
-
-        print(f"Фокус-сессия началась! Таймер на {args.minutes} минут.")
-        print("Нажмите Ctrl+C для прерывания.")
-
-        try:
-            for remaining in range(total_seconds, 0, -1):
-                mins, secs = divmod(remaining, 60)
-                time_display = f"{mins:02d}:{secs:02d}"
-                print(f"Осталось: {time_display}", end='\r')
-                time.sleep(1)
-
-            print("\n\nВремя вышло! Фокус-сессия завершена. 🎉")
-            print("\a")
-
-        except KeyboardInterrupt:
-            print("\n\nФокус-сессия прервана.")
-
-    else:
-        parser.print_help()
+            parser.print_help()
+    except Exception as e:
+        print(f"Ошибка: {e}")
 
 
 if __name__ == '__main__':
