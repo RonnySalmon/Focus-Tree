@@ -1,0 +1,160 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.task-form {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+.task-form h2 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.task-form input[type="text"] {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.task-form button {
+    padding: 10px 15px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.task-form button:hover {
+    background: #219653;
+}
+
+.task-list h2 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    border-left: 4px solid #3498db;
+}
+
+.task.completed {
+    border-left-color: #27ae60;
+    opacity: 0.7;
+}
+
+.task-title {
+    flex-grow: 1;
+    font-weight: 500;
+}
+
+.task-status {
+    margin: 0 15px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    background: #e0e0e0;
+}
+
+.task-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.task-actions button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.btn-done {
+    background: #27ae60;
+    color: white;
+}
+
+.btn-done:hover {
+    background: #219653;
+}
+
+.btn-delete {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #c0392b;
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    color: #7f8c8d;
+    font-size: 0.9em;
+}
+
+@media (max-width: 600px) {
+    .task-form input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+
+    .task {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .task-actions {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: space-between;
+    }
+}
