@@ -8,6 +8,12 @@ from models import Task
 from dotenv import load_dotenv
 load_dotenv()
 
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+
+if not TOKEN:
+    raise ValueError(
+        "Токен бота не найден. Убедитесь, что создали файл .env с TELEGRAM_BOT_TOKEN")
+
 # Добавляем путь для импорта наших модулей
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
